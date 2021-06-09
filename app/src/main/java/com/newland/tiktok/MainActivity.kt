@@ -16,6 +16,7 @@ import com.newland.tiktok.camera1.Camera11Activity
 import com.newland.tiktok.camera1.Camera1Activity
 import com.newland.tiktok.camera1.TakePhoneActivity
 import com.newland.tiktok.camera1.TakeVedioPhoneActivity
+import com.newland.tiktok.camera2.Camera2Activity
 import com.newland.tiktok.network.RetrofitService
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -28,7 +29,7 @@ import java.io.InputStream
 class MainActivity : BaseActivity() {
     override fun getLayoutId(): Int = R.layout.activity_main
 
-    @OnClick(R.id.btn1, R.id.btn2, R.id.btn3,R.id.btn4)
+    @OnClick(R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn5)
     fun onClick(view: View) {
         //检查相机
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -39,6 +40,7 @@ class MainActivity : BaseActivity() {
             R.id.btn2 -> startActivity(Intent(this, TakeVedioPhoneActivity::class.java))
             R.id.btn3 -> startActivity(Intent(this, Camera1Activity::class.java))
             R.id.btn4 -> startActivity(Intent(this, Camera11Activity::class.java))
+            R.id.btn5 -> startActivity(Intent(this, Camera2Activity::class.java))
         }
     }
 
@@ -70,9 +72,12 @@ class MainActivity : BaseActivity() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
             }
         })
-        arrayOf("234234", "sdf")
-        ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.CAMERA,Manifest.permission.MANAGE_EXTERNAL_STORAGE,
-            Manifest.permission.RECORD_AUDIO), 1)
+        ActivityCompat.requestPermissions(
+            this, arrayOf(
+                Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.RECORD_AUDIO
+            ), 1
+        )
     }
 
 }

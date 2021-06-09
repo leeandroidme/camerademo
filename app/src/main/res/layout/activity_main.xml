@@ -30,14 +30,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="录制视频" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="camera2系列" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="拍照" />
 
-
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="200px"
-        android:scaleType="fitCenter" />
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

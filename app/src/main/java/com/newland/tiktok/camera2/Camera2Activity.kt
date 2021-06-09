@@ -1,18 +1,31 @@
 package com.newland.tiktok.camera2
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.ImageFormat
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
+import android.hardware.camera2.CaptureRequest
 import android.media.ImageReader
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
+import android.util.Log
+import android.util.SparseIntArray
+import android.view.Surface
+import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import butterknife.BindView
+import butterknife.OnClick
 import com.newland.tiktok.BaseActivity
 import com.newland.tiktok.R
+import java.io.FileOutputStream
+
 
 /**
  * @author: leellun
@@ -20,19 +33,104 @@ import com.newland.tiktok.R
  *
  */
 class Camera2Activity : BaseActivity() {
-    override fun getLayoutId(): Int = R.layout.activity_camera2
+    companion object {
+        val ORIENTATIONS: SparseIntArray = SparseIntArray()
+
+        init {
+            ORIENTATIONS.append(Surface.ROTATION_0, 90)
+            ORIENTATIONS.append(Surface.ROTATION_90, 0)
+            ORIENTATIONS.append(Surface.ROTATION_180, 270)
+            ORIENTATIONS.append(Surface.ROTATION_270, 180)
+        }
+    }
 
     @BindView(R.id.camera_preview)
     lateinit var surfaceView: SurfaceView
+
     var mCameraDevice: CameraDevice? = null
-    lateinit var cameraId: String;
+    lateinit var cameraId: String
+    lateinit var mImageReader: ImageReader
+    private lateinit var mSurfaceHolder: SurfaceHolder
+
+    lateinit var mainHandler: Handler
+    lateinit var childHandler: Handler
+    lateinit var mCameraManager: CameraManager
+    lateinit var mCameraCaptureSession: CameraCaptureSession
+
+    var mStateCallback = object : CameraDevice.StateCallback() {
+        override fun onOpened(cameraDevice: CameraDevice) {
+            mCameraDevice = cameraDevice
+            takePreview()
+        }
+
+        override fun onDisconnected(cameraDevice: CameraDevice) {
+        }
+
+        override fun onError(cameraDevice: CameraDevice, p1: Int) {
+        }
+
+    }
+
+    override fun getLayoutId(): Int = R.layout.activity_camera2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mSurfaceHolder = surfaceView.holder.apply {
+            addCallback(object : SurfaceHolder.Callback {
+                @SuppressLint("MissingPermission")
+                override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
+                    initCamera()
+                }
 
+                override fun surfaceChanged(
+                    surfaceHolder: SurfaceHolder,
+                    format: Int,
+                    width: Int,
+                    height: Int
+                ) {
+                }
 
-        //Connect to system camera.
-        val manager = getSystemService(CAMERA_SERVICE) as CameraManager
-        var cameraId = manager.cameraIdList[0]
+                override fun surfaceDestroyed(surfaceHolder: SurfaceHolder) {
+                    if (mCameraDevice != null) {
+                        mCameraDevice?.close()
+                        mCameraDevice = null
+                    }
+                }
+
+            })
+            setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
+        }
+    }
+
+    @OnClick(R.id.takephone)
+    fun onClick(view: View) {
+        when (view.id) {
+            R.id.takephone -> takePicture()
+        }
+    }
+
+    private fun initCamera() {
+        val handlerThread = HandlerThread("Camera2")
+        handlerThread.start()
+        childHandler = Handler(handlerThread.looper)
+
+        var width = 640
+        var height = 480
+        mImageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1)
+        mImageReader.setOnImageAvailableListener(object : ImageReader.OnImageAvailableListener {
+            override fun onImageAvailable(reader: ImageReader?) {
+                Log.e("aaaaaaaaaaaaaaaa=>", reader.toString())
+                var image = reader?.acquireNextImage()
+                var buffer = image?.planes?.get(0)?.buffer
+                var bytes = buffer?.remaining()?.let { ByteArray(it) }
+                buffer?.get(bytes)
+                var file=com.newland.tiktok.utils.FileUtils.getExterPath(this@Camera2Activity,"${System.currentTimeMillis()}.jpg")
+                var fos=FileOutputStream(file)
+                fos.write(bytes)
+                fos.flush()
+                fos.close()
+                Toast.makeText(this@Camera2Activity,"图片保存${file}",Toast.LENGTH_LONG).show()
+            }
+        }, childHandler)
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CAMERA
@@ -40,33 +138,70 @@ class Camera2Activity : BaseActivity() {
         ) {
             return
         }
-        manager.openCamera(cameraId, object : CameraDevice.StateCallback() {
-            override fun onOpened(camera: CameraDevice) {
-                mCameraDevice=camera
-            }
-            override fun onDisconnected(camera: CameraDevice) {}
-            override fun onError(camera: CameraDevice, error: Int) {}
-        }, null)
+        mainHandler = Handler(getMainLooper());
+        mCameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+        var cameraId = mCameraManager.cameraIdList[0]
+        mCameraManager.openCamera(cameraId, mStateCallback, mainHandler)
+    }
 
-        var width = 640
-        var height = 480
-        //Render image data onto surface.
-        val imageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1)
-
-// Remember to call this only *after* SurfaceHolder.Callback.surfaceCreated()
+    private fun takePreview() {
         val previewSurface = surfaceView.holder.surface
-        val imReaderSurface = imageReader.surface
+        val imReaderSurface = mImageReader.surface
         val targets = listOf(previewSurface, imReaderSurface)
 
-// Create a capture session using the predefined targets; this also involves defining the
-// session state callback to be notified of when the session is ready
         mCameraDevice?.createCaptureSession(targets, object : CameraCaptureSession.StateCallback() {
             override fun onConfigured(session: CameraCaptureSession) {
-                // Do something with `session`
+                mCameraDevice?.let {
+                    mCameraCaptureSession = session
+                    val captureRequest =
+                        session.device.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                    captureRequest.addTarget(previewSurface)
+                    // 自动对焦
+                    captureRequest.set(
+                        CaptureRequest.CONTROL_AF_MODE,
+                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
+                    );
+                    // 打开闪光灯
+                    captureRequest.set(
+                        CaptureRequest.CONTROL_AE_MODE,
+                        CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH
+                    );
+                    session.setRepeatingRequest(captureRequest.build(), null, childHandler)
+                }
             }
 
             // Omitting for brevity...
             override fun onConfigureFailed(session: CameraCaptureSession) = Unit
-        }, null)
+        }, childHandler)
     }
+
+    /**
+     * 拍照
+     */
+    private fun takePicture() {
+        mCameraDevice?.apply {
+            val captureRequest =
+                mCameraCaptureSession.device.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+            val imReaderSurface = mImageReader.surface
+            captureRequest.addTarget(imReaderSurface)
+            // 自动对焦
+            captureRequest.set(
+                CaptureRequest.CONTROL_AF_MODE,
+                CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
+            );
+            // 打开闪光灯
+            captureRequest.set(
+                CaptureRequest.CONTROL_AE_MODE,
+                CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH
+            );
+            // 获取手机方向
+            // 获取手机方向
+            val rotation: Int = this@Camera2Activity.getWindowManager().getDefaultDisplay().getRotation()
+            // 根据设备方向计算设置照片的方向
+            // 根据设备方向计算设置照片的方向
+            captureRequest.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS[rotation])
+            mCameraCaptureSession.capture(captureRequest.build(), null, childHandler)
+        }
+    }
+
 }

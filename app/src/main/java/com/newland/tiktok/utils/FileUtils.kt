@@ -112,7 +112,7 @@ class FileUtils {
             writeStr(fileName, exStr, true);
         }
         public fun getExterPath(context:Context,file: String): String {
-            return "${context.getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES)?.path}/${BuildConfig.APPLICATION_ID}/${file}"
+            return "${context.getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES)?.path}/${file}"
         }
     }
 }
