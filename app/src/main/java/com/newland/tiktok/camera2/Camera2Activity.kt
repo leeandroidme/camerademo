@@ -24,6 +24,7 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.newland.tiktok.BaseActivity
 import com.newland.tiktok.R
+import com.newland.tiktok.utils.Camera2Utils
 import java.io.FileOutputStream
 
 
@@ -48,12 +49,13 @@ class Camera2Activity : BaseActivity() {
     lateinit var surfaceView: SurfaceView
 
     var mCameraDevice: CameraDevice? = null
-    lateinit var cameraId: String
+    lateinit var mCameraId: String
     lateinit var mImageReader: ImageReader
     private lateinit var mSurfaceHolder: SurfaceHolder
 
     lateinit var mainHandler: Handler
-    lateinit var childHandler: Handler
+    var childHandler: Handler? = null
+    var childHandlerThread: HandlerThread? = null
     lateinit var mCameraManager: CameraManager
     lateinit var mCameraCaptureSession: CameraCaptureSession
 
@@ -74,6 +76,8 @@ class Camera2Activity : BaseActivity() {
     override fun getLayoutId(): Int = R.layout.activity_camera2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mCameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+        mCameraId = Camera2Utils.getFirstCameraIdFacing(mCameraManager)
         mSurfaceHolder = surfaceView.holder.apply {
             addCallback(object : SurfaceHolder.Callback {
                 @SuppressLint("MissingPermission")
@@ -90,10 +94,7 @@ class Camera2Activity : BaseActivity() {
                 }
 
                 override fun surfaceDestroyed(surfaceHolder: SurfaceHolder) {
-                    if (mCameraDevice != null) {
-                        mCameraDevice?.close()
-                        mCameraDevice = null
-                    }
+                    stopCamera()
                 }
 
             })
@@ -101,17 +102,25 @@ class Camera2Activity : BaseActivity() {
         }
     }
 
-    @OnClick(R.id.takephone)
+    @OnClick(R.id.takephone, R.id.exchange)
     fun onClick(view: View) {
         when (view.id) {
             R.id.takephone -> takePicture()
+            R.id.exchange -> changeCamera()
         }
     }
 
+    private fun changeCamera() {
+        stopCamera();
+        mCameraId = Camera2Utils.getNextCameraId(mCameraManager, mCameraId)!!
+        initCamera()
+    }
+
     private fun initCamera() {
-        val handlerThread = HandlerThread("Camera2")
-        handlerThread.start()
-        childHandler = Handler(handlerThread.looper)
+        childHandlerThread = HandlerThread("Camera2").apply {
+            start()
+            childHandler = Handler(looper)
+        }
 
         var width = 640
         var height = 480
@@ -123,12 +132,15 @@ class Camera2Activity : BaseActivity() {
                 var buffer = image?.planes?.get(0)?.buffer
                 var bytes = buffer?.remaining()?.let { ByteArray(it) }
                 buffer?.get(bytes)
-                var file=com.newland.tiktok.utils.FileUtils.getExterPath(this@Camera2Activity,"${System.currentTimeMillis()}.jpg")
-                var fos=FileOutputStream(file)
+                var file = com.newland.tiktok.utils.FileUtils.getExterPath(
+                    this@Camera2Activity,
+                    "${System.currentTimeMillis()}.jpg"
+                )
+                var fos = FileOutputStream(file)
                 fos.write(bytes)
                 fos.flush()
                 fos.close()
-                Toast.makeText(this@Camera2Activity,"图片保存${file}",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@Camera2Activity, "图片保存${file}", Toast.LENGTH_LONG).show()
             }
         }, childHandler)
         if (ActivityCompat.checkSelfPermission(
@@ -139,9 +151,7 @@ class Camera2Activity : BaseActivity() {
             return
         }
         mainHandler = Handler(getMainLooper());
-        mCameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
-        var cameraId = mCameraManager.cameraIdList[0]
-        mCameraManager.openCamera(cameraId, mStateCallback, mainHandler)
+        mCameraManager.openCamera(mCameraId, mStateCallback, mainHandler)
     }
 
     private fun takePreview() {
@@ -196,7 +206,8 @@ class Camera2Activity : BaseActivity() {
             );
             // 获取手机方向
             // 获取手机方向
-            val rotation: Int = this@Camera2Activity.getWindowManager().getDefaultDisplay().getRotation()
+            val rotation: Int =
+                this@Camera2Activity.getWindowManager().getDefaultDisplay().getRotation()
             // 根据设备方向计算设置照片的方向
             // 根据设备方向计算设置照片的方向
             captureRequest.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS[rotation])
@@ -204,4 +215,16 @@ class Camera2Activity : BaseActivity() {
         }
     }
 
+    private fun stopCamera() {
+        childHandler = null
+        childHandlerThread?.apply {
+            quitSafely()
+            join()
+            childHandlerThread = null
+        }
+        mCameraDevice?.apply {
+            close()
+            mCameraDevice = null
+        }
+    }
 }
