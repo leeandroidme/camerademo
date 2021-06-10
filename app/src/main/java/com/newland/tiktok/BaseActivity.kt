@@ -25,4 +25,5 @@ abstract class BaseActivity:AppCompatActivity() {
         super.onDestroy()
         unBinder.unbind()
     }
+
 }

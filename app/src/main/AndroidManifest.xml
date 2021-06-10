@@ -28,6 +28,12 @@
         <activity
             android:name=".camera2.Camera2Activity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".camera2.Camera2AutoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".camera2.DualCameraActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
