@@ -10,10 +10,10 @@ import android.os.StrictMode.VmPolicy
  * @data: 2021/6/7.
  *
  */
-class TiktokApplication : Application() {
+class CameraApplication : Application() {
     companion object {
-        private lateinit var mApplication: TiktokApplication
-        fun getApplication(): TiktokApplication = mApplication
+        private lateinit var mApplication: CameraApplication
+        fun getApplication(): CameraApplication = mApplication
     }
 
     override fun onCreate() {

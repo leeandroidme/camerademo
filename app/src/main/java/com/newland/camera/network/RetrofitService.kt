@@ -4,7 +4,7 @@ import android.text.TextUtils
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.newland.camera.TiktokApplication
+import com.newland.camera.CameraApplication
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -41,7 +41,7 @@ class RetrofitService {
             .connectTimeout(10, TimeUnit.SECONDS).writeTimeout(10, TimeUnit.SECONDS).cookieJar(
                 PersistentCookieJar(
                     SetCookieCache(), SharedPrefsCookiePersistor(
-                        TiktokApplication.getApplication()
+                        CameraApplication.getApplication()
                     )
                 )
             ).build()
