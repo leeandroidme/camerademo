@@ -18,6 +18,7 @@ import com.newland.tiktok.camera1.TakePhoneActivity
 import com.newland.tiktok.camera1.TakeVedioPhoneActivity
 import com.newland.tiktok.camera2.Camera2Activity
 import com.newland.tiktok.camera2.Camera2AutoActivity
+import com.newland.tiktok.camera2.Camera2VideoActivity
 import com.newland.tiktok.camera2.DualCameraActivity
 import com.newland.tiktok.network.RetrofitService
 import okhttp3.ResponseBody
@@ -31,7 +32,7 @@ import java.io.InputStream
 class MainActivity : BaseActivity() {
     override fun getLayoutId(): Int = R.layout.activity_main
 
-    @OnClick(R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn5,R.id.btn6,R.id.btn7)
+    @OnClick(R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn5, R.id.btn6, R.id.btn7, R.id.btn8)
     fun onClick(view: View) {
         //检查相机
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -45,6 +46,7 @@ class MainActivity : BaseActivity() {
             R.id.btn5 -> startActivity(Intent(this, Camera2Activity::class.java))
             R.id.btn6 -> startActivity(Intent(this, Camera2AutoActivity::class.java))
             R.id.btn7 -> startActivity(Intent(this, DualCameraActivity::class.java))
+            R.id.btn8 -> startActivity(Intent(this, Camera2VideoActivity::class.java))
         }
     }
 

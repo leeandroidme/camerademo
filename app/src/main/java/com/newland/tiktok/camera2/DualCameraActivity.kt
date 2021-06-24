@@ -129,6 +129,9 @@ class DualCameraActivity : BaseActivity() {
         }
     }
 
+    /**
+     * 打开摄像头连接
+     */
     @RequiresApi(Build.VERSION_CODES.P)
     fun openDualCamera(
         cameraManager: CameraManager,

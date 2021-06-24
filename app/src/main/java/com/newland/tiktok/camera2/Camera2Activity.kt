@@ -31,7 +31,7 @@ import java.io.FileOutputStream
 /**
  * @author: leellun
  * @data: 2021/6/8.
- *
+ * 照相功能
  */
 class Camera2Activity : BaseActivity() {
     companion object {
