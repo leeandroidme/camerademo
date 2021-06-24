@@ -1,4 +1,4 @@
-package com.newland.tiktok.camera2
+package com.newland.camera.camera2
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -19,9 +19,9 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import butterknife.BindView
 import butterknife.OnClick
-import com.newland.tiktok.BaseActivity
-import com.newland.tiktok.R
-import com.newland.tiktok.utils.Camera2Utils
+import com.newland.camera.BaseActivity
+import com.newland.camera.R
+import com.newland.camera.utils.Camera2Utils
 import kotlinx.coroutines.*
 
 
@@ -187,7 +187,7 @@ class Camera2VideoActivity : BaseActivity() {
 
 
             setOutputFile(
-                com.newland.tiktok.utils.FileUtils.getExterPath(
+                com.newland.camera.utils.FileUtils.getExterPath(
                     this@Camera2VideoActivity,
                     "${System.currentTimeMillis()}.mp4"
                 ).toString()

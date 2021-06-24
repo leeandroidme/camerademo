@@ -1,4 +1,4 @@
-package com.newland.tiktok.camera1
+package com.newland.camera.camera1
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -7,8 +7,7 @@ import android.provider.MediaStore
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
-import com.newland.tiktok.MainActivity
-import com.newland.tiktok.R
+import com.newland.camera.R
 
 /**
  * @author: leellun

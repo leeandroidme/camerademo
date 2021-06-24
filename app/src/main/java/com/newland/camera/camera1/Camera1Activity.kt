@@ -1,19 +1,14 @@
-package com.newland.tiktok.camera1
+package com.newland.camera.camera1
 
-import android.content.Context
 import android.hardware.Camera
 import android.os.Bundle
-import android.os.Environment
-import android.os.FileUtils
 import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
-import androidx.appcompat.widget.LinearLayoutCompat
 import butterknife.BindView
 import butterknife.OnClick
-import com.newland.tiktok.BaseActivity
-import com.newland.tiktok.BuildConfig
-import com.newland.tiktok.R
+import com.newland.camera.BaseActivity
+import com.newland.camera.R
 import java.io.File
 import java.io.FileOutputStream
 
@@ -36,7 +31,7 @@ class Camera1Activity : BaseActivity(), SurfaceHolder.Callback {
                 Log.e("=====>", it)
             }
             var filepath: String =
-                com.newland.tiktok.utils.FileUtils.getExterPath(
+                com.newland.camera.utils.FileUtils.getExterPath(
                     this@Camera1Activity,
                     "${System.currentTimeMillis()}.png"
                 )

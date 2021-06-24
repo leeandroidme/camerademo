@@ -1,7 +1,6 @@
-package com.newland.tiktok.utils
+package com.newland.camera.utils
 
 import android.graphics.Point
-import android.hardware.Camera
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CameraMetadata

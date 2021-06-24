@@ -1,9 +1,7 @@
-package com.newland.tiktok
+package com.newland.camera
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.BindView
-import butterknife.BindViews
 import butterknife.ButterKnife
 import butterknife.Unbinder
 

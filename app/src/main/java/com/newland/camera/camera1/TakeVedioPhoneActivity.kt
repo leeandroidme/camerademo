@@ -1,16 +1,14 @@
-package com.newland.tiktok.camera1
+package com.newland.camera.camera1
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.VideoView
 import butterknife.BindView
 import butterknife.OnClick
-import com.newland.tiktok.BaseActivity
-import com.newland.tiktok.MainActivity
-import com.newland.tiktok.R
+import com.newland.camera.BaseActivity
+import com.newland.camera.R
 
 /**
  * @author: leellun

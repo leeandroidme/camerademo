@@ -1,4 +1,4 @@
-package com.newland.tiktok.camera2
+package com.newland.camera.camera2
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,16 +13,15 @@ import android.util.Log
 import android.util.SparseIntArray
 import android.view.Surface
 import android.view.SurfaceHolder
-import android.view.SurfaceView
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import butterknife.BindView
 import butterknife.OnClick
-import com.newland.tiktok.BaseActivity
-import com.newland.tiktok.R
-import com.newland.tiktok.utils.Camera2Utils
-import com.newland.tiktok.widget.AutoFitSurfaceView
+import com.newland.camera.BaseActivity
+import com.newland.camera.R
+import com.newland.camera.utils.Camera2Utils
+import com.newland.camera.widget.AutoFitSurfaceView
 import java.io.FileOutputStream
 
 
@@ -143,7 +142,7 @@ class Camera2AutoActivity : BaseActivity() {
                 var buffer = image?.planes?.get(0)?.buffer
                 var bytes = buffer?.remaining()?.let { ByteArray(it) }
                 buffer?.get(bytes)
-                var file = com.newland.tiktok.utils.FileUtils.getExterPath(
+                var file = com.newland.camera.utils.FileUtils.getExterPath(
                     this@Camera2AutoActivity,
                     "${System.currentTimeMillis()}.jpg"
                 )

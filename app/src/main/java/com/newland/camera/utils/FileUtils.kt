@@ -1,8 +1,6 @@
-package com.newland.tiktok.utils
+package com.newland.camera.utils
 
 import android.content.Context
-import android.os.Environment
-import com.newland.tiktok.BuildConfig
 import java.io.*
 
 /**

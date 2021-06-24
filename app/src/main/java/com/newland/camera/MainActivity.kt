@@ -1,4 +1,4 @@
-package com.newland.tiktok
+package com.newland.camera
 
 import android.Manifest
 import android.content.Intent
@@ -9,18 +9,17 @@ import android.os.Environment
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import butterknife.OnClick
-import com.newland.tiktok.camera1.Camera11Activity
-import com.newland.tiktok.camera1.Camera1Activity
-import com.newland.tiktok.camera1.TakePhoneActivity
-import com.newland.tiktok.camera1.TakeVedioPhoneActivity
-import com.newland.tiktok.camera2.Camera2Activity
-import com.newland.tiktok.camera2.Camera2AutoActivity
-import com.newland.tiktok.camera2.Camera2VideoActivity
-import com.newland.tiktok.camera2.DualCameraActivity
-import com.newland.tiktok.network.RetrofitService
+import com.newland.camera.camera1.Camera11Activity
+import com.newland.camera.camera1.Camera1Activity
+import com.newland.camera.camera1.TakePhoneActivity
+import com.newland.camera.camera1.TakeVedioPhoneActivity
+import com.newland.camera.camera2.Camera2Activity
+import com.newland.camera.camera2.Camera2AutoActivity
+import com.newland.camera.camera2.Camera2VideoActivity
+import com.newland.camera.camera2.DualCameraActivity
+import com.newland.camera.network.RetrofitService
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback

@@ -1,4 +1,4 @@
-package com.newland.tiktok.camera2
+package com.newland.camera.camera2
 
 import android.Manifest
 import android.content.Context
@@ -18,8 +18,8 @@ import android.view.SurfaceView
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import butterknife.BindView
-import com.newland.tiktok.BaseActivity
-import com.newland.tiktok.R
+import com.newland.camera.BaseActivity
+import com.newland.camera.R
 import java.util.concurrent.Executor
 
 /**

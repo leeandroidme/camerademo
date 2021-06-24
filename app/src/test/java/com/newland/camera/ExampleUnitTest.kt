@@ -1,4 +1,4 @@
-package com.newland.tiktok
+package com.newland.camera
 
 import org.junit.Test
 

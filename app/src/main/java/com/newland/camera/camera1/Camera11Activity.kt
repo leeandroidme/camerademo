@@ -1,23 +1,15 @@
-package com.newland.tiktok.camera1
+package com.newland.camera.camera1
 
-import android.content.Context
 import android.hardware.Camera
 import android.media.CamcorderProfile
 import android.media.MediaRecorder
 import android.os.Bundle
-import android.os.Environment
-import android.os.FileUtils
-import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
-import androidx.appcompat.widget.LinearLayoutCompat
 import butterknife.BindView
 import butterknife.OnClick
-import com.newland.tiktok.BaseActivity
-import com.newland.tiktok.BuildConfig
-import com.newland.tiktok.R
-import java.io.File
-import java.io.FileOutputStream
+import com.newland.camera.BaseActivity
+import com.newland.camera.R
 
 /**
  * @author: leellun
@@ -102,7 +94,7 @@ class Camera11Activity : BaseActivity(), SurfaceHolder.Callback {
 
                 // Step 4: Set output file
                 setOutputFile(
-                    com.newland.tiktok.utils.FileUtils.getExterPath(
+                    com.newland.camera.utils.FileUtils.getExterPath(
                         this@Camera11Activity,
                         "${System.currentTimeMillis()}.mp4"
                     ).toString()

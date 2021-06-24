@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.newland.tiktok">
+    package="com.newland.camera">
 
     <application
-        android:name=".TiktokApplication"
+        android:name="com.newland.camera.TiktokApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tiktok">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.newland.camera.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".camera1.TakePhoneActivity" />
-        <activity android:name=".camera1.TakeVedioPhoneActivity" />
+        <activity android:name="com.newland.camera.camera1.TakePhoneActivity" />
+        <activity android:name="com.newland.camera.camera1.TakeVedioPhoneActivity" />
         <activity
-            android:name=".camera1.Camera1Activity"
+            android:name="com.newland.camera.camera1.Camera1Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".camera1.Camera11Activity"
+            android:name="com.newland.camera.camera1.Camera11Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".camera2.Camera2Activity"
+            android:name="com.newland.camera.camera2.Camera2Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".camera2.Camera2AutoActivity"
+            android:name="com.newland.camera.camera2.Camera2AutoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".camera2.DualCameraActivity"
+            android:name="com.newland.camera.camera2.DualCameraActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".camera2.Camera2VideoActivity"
+            android:name="com.newland.camera.camera2.Camera2VideoActivity"
             android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.newland.tiktok"
+            android:authorities="com.newland.camera"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

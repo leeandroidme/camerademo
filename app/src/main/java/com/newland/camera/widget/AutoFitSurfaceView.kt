@@ -1,4 +1,4 @@
-package com.newland.tiktok.widget
+package com.newland.camera.widget
 
 import android.content.Context
 import android.util.AttributeSet

@@ -1,4 +1,4 @@
-package com.newland.tiktok.network
+package com.newland.camera.network
 
 import okhttp3.ResponseBody
 import retrofit2.http.GET
